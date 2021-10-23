@@ -8,7 +8,6 @@ import { convertDuration } from '../../utils/convertDuration';
 
 import styles from './episode.module.scss'
 
-
 type Episode = {
   id: string;
   title: string;
@@ -27,12 +26,6 @@ type EpisodeProps = {
 }
 
 export default function Episode({ episode }: EpisodeProps) {
-  const router = useRouter();
-
-  if (router.isFallback) {
-    return <p>Carregando...</p>
-  }
-
   return (
     <div className={styles.episode}>
       <div className={styles.thumbnailContainer}>
@@ -78,7 +71,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }))
 
   return {
-    paths: [],
+    paths,
     fallback: 'blocking'
   }
 }
