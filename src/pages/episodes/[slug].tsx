@@ -23,11 +23,15 @@ type Episode = {
 
 
 type EpisodeProps = {
-  episodes: Episode;
+  episode: Episode;
 }
 
 export default function Episode({ episode }: EpisodeProps) {
   const router = useRouter();
+
+  if (router.isFallback) {
+    return <p>Carregando...</p>
+  }
 
   return (
     <div className={styles.episode}>
@@ -58,6 +62,21 @@ export default function Episode({ episode }: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+
+  const { data } = await api.get('episodes', {
+    params: {
+      __limit: 2,
+      __sort: 'published_at',
+      __order: 'desc'
+    }
+  })
+
+  const paths = data.map(episode => ({
+    params: {
+      slug: episode.id
+    }
+  }))
+
   return {
     paths: [],
     fallback: 'blocking'
